@@ -5,7 +5,7 @@ const router = express.Router(); // eslint-disable-line
 
 // Get all users
 router.get('/', (req, res) => {
-    User.find().then(users =>  res.status(200).json(users)).catch(next);
+    User.find().then(users =>  res.status(200).json(users));
 });
 
 // register
@@ -21,32 +21,6 @@ router.put('/:id',  (req, res) => {
     }, req.body, {
       upsert: false,
     })
-    .then(user => res.json(200, user)).catch(next);
+    .then(user => res.json(200, user));
 });
-
-router.post('/:userName/favourites', (req, res, next) => {
-  const newFavourite = req.body;
-  const query = {username: req.params.userName};
-  if (newFavourite && newFavourite.id) {
-    User.find(query).then(
-      user => { 
-        (user.favourites)?user.favourites.push(newFavourite):user.favourites =[newFavourite];
-        console.log(user);
-        User.findOneAndUpdate(query, {favourites:user.favourites}, {
-          new: true
-        }).then(user => res.status(201).send(user));
-      }
-    ).catch(next);
-  } else {
-      res.status(401).send("Unable to find user")
-  }
-});
-
-router.get('/:userName/favourites', (req, res, next) => {
-  const user = req.params.userName;
-  User.find( {username: user}).then(
-      user => res.status(201).send(user.favourites)
-  ).catch(next);
-});
-
 export default router;
