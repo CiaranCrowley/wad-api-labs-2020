@@ -43,16 +43,11 @@ app.use(session({
 	resave: true,
 	saveUninitialized: true
 }));
-
 // initialise passport​
 app.use(passport.initialize());
-
 // Add passport.authenticate(..)  to middleware stack for protected routes​
 app.use('/api/movies', passport.authenticate('jwt', {session: false}), moviesRouter);
-
-// app.use('/api/movies', moviesRouter);
-// app.use('/api/genres', moviesRouter);
-
+app.use('/api/genres', moviesRouter);
 //Users router
 app.use('/api/users', usersRouter);
 app.use(errHandler);
