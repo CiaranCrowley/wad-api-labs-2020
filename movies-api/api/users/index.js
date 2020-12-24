@@ -25,6 +25,7 @@ router.put('/:id',  (req, res) => {
 	// .then(user => res.json(200, user));
 });
 
+// get user favourites
 router.get('/:userName/favourites', (req, res, next) => {
 	const user = req.params.userName;
 	User.find( {username: user})
@@ -33,6 +34,7 @@ router.get('/:userName/favourites', (req, res, next) => {
 	).catch(next);
 });
 
+// post user favourites
 router.post('/:userName/favourites', (req, res, next) => {
 	const newFavourite = req.body;
 	const query = {username: req.params.userName};

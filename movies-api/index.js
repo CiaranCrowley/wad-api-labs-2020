@@ -31,6 +31,7 @@ app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded())
 app.use('/api/movies', moviesRouter);
+app.use('/api/genres', moviesRouter);
 //Users router
 app.use('/api/users', usersRouter);
 app.use(errHandler);
