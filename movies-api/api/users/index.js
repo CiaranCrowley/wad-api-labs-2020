@@ -74,15 +74,30 @@ router.put('/:id',  (req, res) => {
 	.then(user => res.status(200).json({success:true,token:"FakeTokenForNow"})).catch(next);
 });
 
-//Add a favourite. No Error Handling Yet. Can add duplicates too!
+// doesnt work. dont know why
 router.post('/:userName/favourites', async (req, res, next) => {
 	const newFavourite = req.body.id;
-	const userName = req.params.userName;
-	const movie = await movieModel.findByMovieDBId(newFavourite);
-	const user = await User.findByUserName(userName);
-	await user.favourites.push(movie._id);
-	await user.save();
-	res.status(201).json(user);
+	const query = {username: req.params.userName};
+	if (newFavourite && newFavourite.id) {
+		console.log("HERE 1")
+		User.find(query).then(
+			user => {
+				(user.favourites)?user.favourites.push(newFavourite):user.favourites =[newFavourite];
+				User.findOneAndUpdate(query, {favourites:user.favourites}, {
+					new: true
+				}).then(user => res.status(201).send(user));
+			}
+		).catch((error) => next(error));
+	} else {
+		res.status(401).send(`Unable to find user ${req.params.userName} `)
+	};
+
+	// const userName = req.params.userName;
+	// const movie = await movieModel.findByMovieDBId(newFavourite);
+	// const user = await User.findByUserName(userName);
+	// await user.favourites.push(movie._id);
+	// await user.save();
+	// res.status(201).json(user);
 });
 
 export default router;
