@@ -3,8 +3,7 @@ import mongoose from 'mongoose';
 
 dotenv.config();
 
-// Connect to database
-mongoose.connect(process.env.mongoDB);
+mongoose.connect(process.env.localDB, {useCreateIndex: true, useNewUrlParser: true});
 const db = mongoose.connection;
 
 db.on('error', (err) => {
@@ -13,6 +12,6 @@ db.on('error', (err) => {
 db.on('disconnected', () => {
     console.log('database disconnected');
 });
-db.once('open', () => {
+db.once('open', function() {
     console.log(`database connected to ${db.name} on ${db.host}`);
 })

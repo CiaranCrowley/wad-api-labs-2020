@@ -10,15 +10,31 @@ router.get('/', (req, res) => {
 	User.find().then(users =>  res.status(200).json(users));
 });
 
-// authenticate a user
+// get user favourites
+router.get('/:userName/favourites', (req, res, next) => {
+	const userName = req.params.userName;
+	User.findByUserName(userName).populate('favourites').then(
+		user => res.status(201).json(user.favourites)
+	).catch(next);
+});
+
 // Register OR authenticate a user
 router.post('/', async (req, res, next) => {
+	var regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,}$/;
 	if (!req.body.username || !req.body.password) {
 		res.status(401).json({
 			success: false,
 			msg: 'Please pass username and password.',
 		});
-	}
+	};
+
+	if (!regex.test(req.body.password)) {
+		res.status(401).json({
+			success: false,
+			msg: 'make sure your password is at least 5 characters long and contains at least one number and one letter,'
+		});
+	};
+
 	if (req.query.action === 'register') {
 		await User.create(req.body).catch(next);
 		res.status(201).json({
@@ -56,15 +72,6 @@ router.put('/:id',  (req, res) => {
 		upsert: false,
 	})
 	.then(user => res.status(200).json({success:true,token:"FakeTokenForNow"})).catch(next);
-	// .then(user => res.json(200, user));
-});
-
-// get user favourites
-router.get('/:userName/favourites', (req, res, next) => {
-	const userName = req.params.userName;
-	User.findByUserName(userName).populate('favourites').then(
-		user => res.status(201).json(user.favourites)
-	).catch(next);
 });
 
 //Add a favourite. No Error Handling Yet. Can add duplicates too!
