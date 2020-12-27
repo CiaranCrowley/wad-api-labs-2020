@@ -1,0 +1,7 @@
+npm install --save-dev babel-cli babel-preset-env nodemon eslint babel-eslint
+npm install --save dotenv express
+npm install -s node-fetch
+npm install -save mongoose
+npm install --save express-session
+npm install --save passport passport-jwt jsonwebtoken bcrypt-nodejs
+
