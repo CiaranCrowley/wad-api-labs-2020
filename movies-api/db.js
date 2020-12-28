@@ -3,7 +3,8 @@ import mongoose from 'mongoose';
 
 dotenv.config();
 
-mongoose.connect(process.env.localDB, {useCreateIndex: true, useNewUrlParser: true});
+mongoose.connect(process.env.localDB, {useCreateIndex: true, useNewUrlParser: true,  useUnifiedTopology: true});
+
 const db = mongoose.connection;
 
 db.on('error', (err) => {

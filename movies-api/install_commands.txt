@@ -4,4 +4,3 @@ npm install -s node-fetch
 npm install -save mongoose
 npm install --save express-session
 npm install --save passport passport-jwt jsonwebtoken bcrypt-nodejs
-
